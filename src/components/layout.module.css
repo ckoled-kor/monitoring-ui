@@ -1,0 +1,21 @@
+.layout {
+  height: 100vh;
+}
+
+.header {
+  color: white;
+}
+
+.footer {
+  text-align: center;
+  height: 70px;
+}
+
+.content {
+  min-height: calc(100vh - 140px);
+  background: rgb(255, 255, 255);
+}
+
+.logo {
+  color: white;
+}
