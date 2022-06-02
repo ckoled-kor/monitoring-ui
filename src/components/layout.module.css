@@ -3,7 +3,8 @@
 }
 
 .header {
-  color: white;
+  color: #f0f2f5;
+  display: flex;
 }
 
 .footer {
@@ -17,5 +18,12 @@
 }
 
 .logo {
-  color: white;
+  color: #f0f2f5;
+}
+
+.dropdown_button {
+  align-self: center;
+  margin-left: auto;
+  background-color: rgba(0, 0, 0, 0);
+  color: #f0f2f5;
 }

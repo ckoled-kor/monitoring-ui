@@ -71,11 +71,11 @@ export default function Login() {
   eSubmit(()=>null)();
   document.title='Login';
   return (
-    <GlobalLayout>
+    <GlobalLayout login>
       <div className='center-div'>
         <div className='bg-image'/>
         <div className='login-div'>
-          <h1 style={{alignSelf:'center', fontSize:'48px', fontWeight:'bold'}}>Sign In</h1>
+          <h1 style={{alignSelf:'center', fontSize:'3.3em', fontWeight:'bold'}}>Sign In</h1>
           {showCode?
             <form onSubmit={cSubmit(onCodeSubmit)} className='form-div'>
               <Input.Group compact size='large' style={{display:'flex', flexDirection:'row'}}>
@@ -105,7 +105,7 @@ export default function Login() {
                   rules={{ required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}}
                   render={({ field }) => <Input {...field}
                     status={emailError?'error':''}
-                    placeholder='example@example.com'
+                    placeholder='email@example.com'
                   />}
                 />
                 <Button

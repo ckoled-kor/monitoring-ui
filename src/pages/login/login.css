@@ -21,15 +21,16 @@
 }
 
 .login-div {
-  background-color: #f0f2f5; /* Fallback color */
+  background-color: #f0f2f5;
+  box-shadow: 0.3em 0.5em 5px;
   font-weight: bold;
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
   padding: 40px 60px;
-  width: 40%;
+  width: 37%;
   min-width: 200px;
   height: 28%;
   min-height: 200px;
