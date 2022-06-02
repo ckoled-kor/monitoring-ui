@@ -13,7 +13,7 @@ export default function Router() {
           <Route path='/' element={<Navigate to='/dashboard' replace/>}/>
           <Route path='/dashboard' element={<Dashboard />}/>
         </Route>
-        <Route path='/login' element={<Login />}/>
+        <Route path='/login' element={(useAuth().loggedIn)?<Navigate to='/' replace />:<Login />}/>
         <Route
           path="*"
           element={<Navigate to="/" replace />}
@@ -24,9 +24,5 @@ export default function Router() {
 }
 
 export function ProtectedRoute() {
-  const auth = useAuth();
-  console.log(auth);
-  if (!auth.loggedIn)
-    return <Navigate to='/login' replace />;
-  return <Outlet />;
+  return (useAuth().loggedIn)?<Outlet />:<Navigate to='/login' replace />;
 }
