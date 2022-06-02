@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Input, Button, Typography } from 'antd';
+import { Input, Button } from 'antd';
 import { LeftOutlined, ArrowRightOutlined, LoadingOutlined } from '@ant-design/icons';
 
 import GlobalLayout from '../../components/layout';
@@ -37,7 +37,7 @@ export default function Login() {
     try {
       if (data.email) {
         console.log(data.email);
-        //await signIn(data.email);
+        await signIn(data.email);
         setShowCode(true);
       }
     } catch (e) {
@@ -53,7 +53,7 @@ export default function Login() {
     try {
       if (data.code) {
         console.log(data.code);
-        // await verifyCode(data.code);
+        await verifyCode(data.code);
         setShowCode(false);
       }
     } catch (e) {
@@ -67,13 +67,11 @@ export default function Login() {
     setShowCode(false);
   }
 
-  cSubmit(()=>null)()
-  eSubmit(()=>null)()
+  cSubmit(()=>null)();
+  eSubmit(()=>null)();
+  document.title='Login';
   return (
     <GlobalLayout>
-      <head>
-        <title>Login</title>
-      </head>
       <div className='center-div'>
         <div className='bg-image'/>
         <div className='login-div'>
