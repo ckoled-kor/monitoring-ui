@@ -6,10 +6,14 @@ import date from 'date-and-time';
 import { usePopupContext } from './graph';
 
 import styles from './serviceInfo.module.css';
+import { BffApiService } from '../services/bffApi';
+import { useAuth } from '../config/auth';
+import { ILogGroup } from '../interfaces';
 
 const staticlogs = require('./logGroups.json');
 
 export default function ServiceInfo({ service }: any) {
+  const auth = useAuth();
   const [showModal, setShowModal] = usePopupContext();
   const [logGroups, setLogGroups] = useState([] as any);
 
@@ -18,13 +22,16 @@ export default function ServiceInfo({ service }: any) {
   }
 
   useEffect(() => {
+    // const api = new BffApiService(auth.apiToken!)
     const getData = async () => {
-      const logs = staticlogs[service.serviceName];
+      const logs: ILogGroup[] = staticlogs[service.serviceName];
       await new Promise(r => setTimeout(r, 1000));
+      // const logs = await api.getLogGroups(service.serviceName);
       setLogGroups(logs);
+      // setLogGroups(logs?.logGroups);
     }
     getData();
-  }, [service.serviceName]);
+  }, [auth.apiToken, service.serviceName]);
 
   return (
     <div className={styles.content_div}>
@@ -40,9 +47,9 @@ export default function ServiceInfo({ service }: any) {
         <List
           className={styles.list}
           dataSource={logGroups}
-          renderItem={(logGroup: any) => (
+          renderItem={(logGroup: ILogGroup) => (
             <List.Item className={styles.list_item}>
-              <text style={{color:(logGroup.logErrorStatus)?'red':'inherit'}}>{logGroup.logGroupName}</text>
+              <a href={logGroup.logGroupLink} className={styles.log} style={{color:(logGroup.logErrorStatus)?'red':'inherit'}}>{logGroup.logGroupName}</a>
               <text style={{marginRight:'5px'}}>{date.format(new Date(logGroup.lastUpdateTS), 'YYYY/MM/DD HH:mm:ss')}</text>
             </List.Item>
           )}

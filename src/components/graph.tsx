@@ -16,7 +16,13 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import Popup from 'reactjs-popup';
 
+import { useAuth } from '../config/auth';
+import { BffApiService } from '../services/bffApi';
+import { IService } from '../interfaces';
+
 import ServiceInfo from './serviceInfo';
+
+const staticServices = require('./services.json');
 
 const initialNodes: Node[] = [];
 const initialEdges: Edge[] = [];
@@ -24,11 +30,12 @@ const initialEdges: Edge[] = [];
 const PopupContext = createContext([] as any);
 
 export default function Flow() {
+  const auth = useAuth();
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [showModal, setShowModal] = useState(false);
-  const [selectedService, setSelectedService] = useState({});
-  const [services, setServices] = useState([] as any);
+  const [selectedService, setSelectedService] = useState({} as IService);
+  const [services, setServices] = useState([] as IService[]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -43,7 +50,7 @@ export default function Flow() {
     [setEdges]
   );
   const onNodeClick = (event: React.MouseEvent, node: Node) => {
-    setSelectedService(services.find((e: any) => e.serviceName === node.data.name))
+    setSelectedService(services.find((e: any) => e.serviceName === node.data.name)!)
     setShowModal(true);
   }
   const closeModal = () => setShowModal(false)
@@ -53,38 +60,10 @@ export default function Flow() {
     const serviceEdges: Edge[] = [];
     
     const getServices = async () => {
-      const services = [
-        {
-          "contactInfo": {
-            "name": "Scott MacCombie",
-            "email": "scott.maccombie@porsche.digital"
-          },
-          "healthStatus": {
-            "components": {
-              "Vehicle Info Service": "UP"
-            },
-            "status": "DOWN"
-          },
-          "serviceName": "One Sales",
-          "lastUpdateTS": "2022-06-02T22:50:25Z",
-          "team": "Targa Acquired",
-        },
-        {
-          "contactInfo": {
-            "name": "Ben Fletcher",
-            "email": "ben.fletcher@porsche.digital"
-          },
-          "healthStatus": {
-            "status": "UP"
-          },
-          "serviceName": "Vehicle Info Service",
-          "lastUpdateTS": "2022-06-02T22:50:25Z",
-          "team": "Platform",
-          logErrorStatus: 'ERROR',
-          lastLogEventsWithErrorsTS: '2022-06-02T22:50:25Z'
-        }
-      ]
-      services.forEach((svc, i) => {
+      const services = staticServices;
+      // const api = new BffApiService(auth.apiToken!);
+      // const services = await api.getServices();
+      services?.services.forEach((svc: IService, i: number) => {
         serviceNodes.push({ 
           id: svc.serviceName,
           data: { label: <div style={{
@@ -99,7 +78,7 @@ export default function Flow() {
               gridColumnEnd: 10,
               justifySelf: 'center'
             }}>{svc.serviceName}</h3>
-            {svc.healthStatus.status==='UP'?<CheckCircleTwoTone twoToneColor="#52c41a" style={{
+            {svc.healthStatus.status.match(/^(UP|OK)$/)?<CheckCircleTwoTone twoToneColor="#52c41a" style={{
               gridRow: 1,
               gridColumn: 10,
               justifySelf: 'end',
@@ -144,7 +123,7 @@ export default function Flow() {
       })
       setNodes(serviceNodes);
       setEdges(serviceEdges);
-      setServices(services);
+      setServices(services!.services);
     }
     getServices();
   }, [])
