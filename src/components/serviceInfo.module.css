@@ -6,7 +6,7 @@
   padding: 1.5em 1.5em;
   display: grid;
   grid-auto-columns: 10em;
-  grid-auto-rows: 2em;
+  grid-auto-rows: 1.8em;
   box-shadow: 0.05em 0.1em 3px;
   border-radius: 10px;
 }
@@ -37,8 +37,8 @@
 .list {
   grid-column-start: 1;
   grid-column-end: 6;
-  grid-row-start: 8;
-  grid-row-end: 21;
+  grid-row-start: 9;
+  grid-row-end: 23;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -46,7 +46,7 @@
 .list_divider {
   grid-column-start: 1;
   grid-column-end: 6;
-  grid-row: 7;
+  grid-row: 8;
   align-self: center;
 }
 
@@ -54,31 +54,36 @@
   grid-column-start: 1;
   grid-column-end: 6;
   grid-row: 2;
-  align-self: center;
 }
 
-.contact {
+.status {
   grid-column-start: 1;
   grid-column-end: 6;
   grid-row: 3;
 }
 
-.team {
+.contact {
   grid-column-start: 1;
   grid-column-end: 6;
   grid-row: 4;
 }
 
-.last_update {
+.team {
   grid-column-start: 1;
   grid-column-end: 6;
   grid-row: 5;
 }
 
-.error_status {
+.last_update {
   grid-column-start: 1;
   grid-column-end: 6;
   grid-row: 6;
+}
+
+.error_status {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row: 7;
 }
 
 .list_item {
@@ -90,5 +95,5 @@
 }
 
 .log_tooltip {
-  
+
 }

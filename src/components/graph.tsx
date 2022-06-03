@@ -1,4 +1,4 @@
-import { CheckCircleTwoTone, ExclamationCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { CheckCircleTwoTone, ExclamationCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 import { useState, useCallback, createContext, useContext, useEffect } from 'react';
 import ReactFlow, {
   addEdge,
@@ -85,16 +85,14 @@ export default function Flow() {
               fontSize: 10,
               fontWeight: 'bold'
             }}/>:
-            <ExclamationCircleOutlined style={{
-              color: 'red',
+            <ExclamationCircleTwoTone twoToneColor='red' style={{
               gridRow: 1,
               gridColumn: 10,
               justifySelf: 'end',
               fontSize: 10,
               fontWeight: 'bold'
             }}/>}
-            {svc.logErrorStatus && <WarningOutlined style={{
-              color: 'orange',
+            {svc.logErrorStatus && <WarningTwoTone twoToneColor='orange' style={{
               gridRow: 1,
               gridColumn: 10,
               justifySelf: 'end',

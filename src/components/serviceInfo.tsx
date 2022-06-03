@@ -8,11 +8,11 @@ import { usePopupContext } from './graph';
 import styles from './serviceInfo.module.css';
 import { BffApiService } from '../services/bffApi';
 import { useAuth } from '../config/auth';
-import { ILogGroup } from '../interfaces';
+import { ILogGroup, IService } from '../interfaces';
 
 const staticlogs = require('./logGroups.json');
 
-export default function ServiceInfo({ service }: any) {
+export default function ServiceInfo({ service }: {service: IService}) {
   const auth = useAuth();
   const [showModal, setShowModal] = usePopupContext();
   const [logGroups, setLogGroups] = useState([] as any);
@@ -38,7 +38,8 @@ export default function ServiceInfo({ service }: any) {
       <Button className={styles.exit} type='text' icon={<CloseOutlined />} danger onClick={close}/>
       <h1 className={styles.title}>{service.serviceName}</h1>
       <Divider className={styles.divider} />
-      <p className={styles.contact}>Contact Info: {service.contactInfo.name} {<a href={`mailto:${service.contactInfo.email}`}>{service.contactInfo.email}</a>}</p>
+      <p className={styles.status}>Status: {<text style={{color:service.healthStatus.status==='UP'?'green':'red'}}>{service.healthStatus.status}</text>}</p>
+      <p className={styles.contact}>Contact Info: {service.contactInfo?.name} {<a href={`mailto:${service.contactInfo?.email}`}>{service.contactInfo?.email}</a>}</p>
       <p className={styles.team}>Team: {service.team}</p>
       <p className={styles.last_update}>Last Update: {date.format(new Date(service.lastUpdateTS), 'YYYY/MM/DD HH:mm:ss')}</p>
       <p className={styles.error_status}>Log Error Status: {service.logErrorStatus?<text style={{color:'red'}}>{service.logErrorStatus}</text>:<text style={{color:'green'}}>OK</text>} {service.lastLogEventsWithErrorsTS && date.format(new Date(service.lastLogEventsWithErrorsTS), 'YYYY/MM/DD HH:mm:ss')}</p>
