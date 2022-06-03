@@ -6,7 +6,6 @@ import { LeftOutlined, ArrowRightOutlined, LoadingOutlined } from '@ant-design/i
 import GlobalLayout from '../../components/layout';
 import { useAuth } from '../../config/auth';
 
-import 'antd/dist/antd.css';
 import './login.css';
 
 type IFormInput = {
