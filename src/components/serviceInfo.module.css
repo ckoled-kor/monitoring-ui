@@ -1,13 +1,14 @@
 .content_div {
-  height:42em;
-  width:52em;
-  background-color: white;
+  height:43em;
+  width:53em;
+  background-color: rgb(250, 250, 250);
   border: 2px solid black;
-  padding: 1em 1em;
+  padding: 1.5em 1.5em;
   display: grid;
   grid-auto-columns: 10em;
-  grid-auto-rows: 5em;
+  grid-auto-rows: 2em;
   box-shadow: 0.05em 0.1em 3px;
+  border-radius: 10px;
 }
 
 .exit {
@@ -19,7 +20,7 @@
 
 .loading {
   grid-column: 3;
-  grid-row: 5;
+  grid-row: 12;
   height: 36px;
   width: 36px;
   justify-self: center;
@@ -36,8 +37,50 @@
 .list {
   grid-column-start: 1;
   grid-column-end: 6;
-  grid-row-start: 2;
-  grid-row-end: 9;
+  grid-row-start: 8;
+  grid-row-end: 21;
   overflow: scroll;
   overflow-x: hidden;
+}
+
+.list_divider {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row: 7;
+  align-self: center;
+}
+
+.divider {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row: 2;
+  align-self: center;
+}
+
+.contact {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row: 3;
+}
+
+.team {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row: 4;
+}
+
+.last_update {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row: 5;
+}
+
+.error_status {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row: 6;
+}
+
+.list_item {
+
 }

@@ -44,8 +44,7 @@ export default function GlobalLayout({ children, login }: any) {
             }
           ]}
         />} placement="bottomRight">
-          <Button className={styles.dropdown_button} style={{
-            backgroundColor: 'transparent',
+          <Button className={styles.dropdown_button} type='text' style={{
             color: 'white',
             border: '2px solid',
             borderRadius:'50%'
