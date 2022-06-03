@@ -17,7 +17,7 @@ export default function ServiceInfo({ serviceName }: any) {
 
   useEffect(() => {
     const getData = async () => {
-      const logs = staticlogs.logGroups;
+      const logs = staticlogs[serviceName];
       await new Promise(r => setTimeout(r, 1000));
       setLogGroups(logs);
     }
