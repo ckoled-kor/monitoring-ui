@@ -4,7 +4,7 @@ import Flow from '../../components/graph';
 import './dashboard.css';
 
 export default function Dashboard() {
-  document.title='Dashboard';
+  document.title='Dashboard | Monitoring App';
   return (
     <GlobalLayout>
       <div className='graph-div'>

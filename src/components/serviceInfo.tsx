@@ -33,7 +33,7 @@ export default function ServiceInfo({ serviceName }: any) {
           className={styles.list}
           dataSource={logGroups}
           renderItem={(logGroup: any) => (
-            <List.Item>
+            <List.Item style={{color:(logGroup.logErrorStatus)?'red':'inherit'}}>
               {logGroup.logGroupName}
             </List.Item>
           )}

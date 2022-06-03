@@ -37,4 +37,5 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  /* --submit-color: #d5001c */
 }

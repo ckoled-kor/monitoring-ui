@@ -68,7 +68,7 @@ export default function Login() {
 
   cSubmit(()=>null)();
   eSubmit(()=>null)();
-  document.title='Login';
+  document.title='Login | Monitoring App';
   return (
     <GlobalLayout login>
       <div className='center-div'>

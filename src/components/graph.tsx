@@ -1,7 +1,6 @@
 import { useState, useCallback, createContext, useContext, useEffect } from 'react';
 import ReactFlow, {
   addEdge,
-  FitViewOptions,
   applyNodeChanges,
   applyEdgeChanges,
   Node,
@@ -11,22 +10,15 @@ import ReactFlow, {
   Connection,
   Background,
   Controls,
+  MiniMap,
   MarkerType
 } from 'react-flow-renderer';
 import Popup from 'reactjs-popup';
 
 import ServiceInfo from './serviceInfo';
 
-const initialNodes: Node[] = [
-  { id: '1', data: { label: 'Node 1' }, position: { x: 5, y: 5 } },
-  { id: '2', data: { label: 'Node 2' }, position: { x: 5, y: 100 } },
-];
-
+const initialNodes: Node[] = [];
 const initialEdges: Edge[] = [];
-
-const fitViewOptions: FitViewOptions = {
-  padding: 0.2
-}
 
 const PopupContext = createContext([] as any);
 
@@ -45,9 +37,7 @@ export default function Flow() {
     [setEdges]
   );
   const onConnect = useCallback(
-    (connection: Connection) => setEdges((eds) => addEdge({...connection, markerEnd:{
-      type: MarkerType.ArrowClosed,
-    }}, eds)),
+    (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
     [setEdges]
   );
   const onNodeClick = (event: React.MouseEvent, node: Node) => {
@@ -58,6 +48,7 @@ export default function Flow() {
 
   useEffect(() => {
     const serviceNodes: Node[] = [];
+    const serviceEdges: Edge[] = [];
     
     const getServices = async () => {
       const services = [
@@ -70,7 +61,7 @@ export default function Flow() {
             "components": {
               "Vehicle Info Service": "UP"
             },
-            "status": "OK"
+            "status": "UP"
           },
           "serviceName": "One Sales",
           "lastUpdateTS": "2022-06-02T22:50:25Z",
@@ -89,13 +80,49 @@ export default function Flow() {
           "team": "Platform"
         }
       ]
-      services.forEach((svc, i) => serviceNodes.push({ 
-        id: `${i}`,
-        data: { label: `${svc.serviceName} ${svc.healthStatus.status}`, name: svc.serviceName },
-        position: { x: 0, y: 100*i }
-      }))
-      console.log(serviceNodes)
+      services.forEach((svc, i) => {
+        serviceNodes.push({ 
+          id: svc.serviceName,
+          data: { label: <div style={{
+            width: '112%',
+            margin: '-8px 0px -13px -8px',
+            display: 'grid',
+            gridAutoColumns: '10%'
+          }}>
+            <h3 style={{
+              gridRow: 1,
+              gridColumnStart: 2,
+              gridColumnEnd: 10,
+              justifySelf: 'center'
+            }}>{svc.serviceName}</h3>
+            <p style={{
+              color: (svc.healthStatus.status==='UP')?'green':'red',
+              gridRow: 1,
+              gridColumn: 10,
+              justifySelf: 'end',
+              fontSize: 10,
+              fontWeight: 'bold'
+            }}>{svc.healthStatus.status}</p>
+          </div>, name: svc.serviceName },
+          position: { x: 0, y: 100*i },
+          style: {
+            width: 120
+          }
+        })
+        svc.healthStatus.components && Object.keys(svc.healthStatus.components).forEach((dep) => {
+          serviceEdges.push({
+            id: `${svc.serviceName}-${dep}`,
+            source: svc.serviceName,
+            target: dep,
+            animated: true,
+            markerEnd: {
+              type: MarkerType.ArrowClosed
+            }
+          })
+        })
+      })
       setNodes(serviceNodes);
+      setEdges(serviceEdges);
     }
     getServices();
   }, [])
@@ -110,10 +137,10 @@ export default function Flow() {
         onConnect={onConnect}
         onNodeClick={onNodeClick}
         fitView
-        fitViewOptions={fitViewOptions}
       >
         <Background />
         <Controls />
+        <MiniMap />
       </ReactFlow>
       <PopupContext.Provider value={[showModal, setShowModal]}>
         <Popup open={showModal} onClose={closeModal}>
