@@ -19,8 +19,9 @@ import { BffApiService } from '../services/bffApi';
 import { IService } from '../interfaces';
 
 import ServiceInfo from './serviceInfo';
+import { useServiceStore } from '../services/state/services';
 
-const staticServices = require('./services.json');
+// const staticServices = require('./services.json');
 
 const initialNodes: Node[] = [];
 const initialEdges: Edge[] = [];
@@ -29,6 +30,7 @@ const PopupContext = createContext([] as any);
 
 export default function Flow() {
   const auth = useAuth();
+  const serviceStore = useServiceStore();
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [showModal, setShowModal] = useState(false);
@@ -52,12 +54,16 @@ export default function Flow() {
   useEffect(() => {
     const serviceNodes: Node[] = [];
     const serviceEdges: Edge[] = [];
-    
+    const api = new BffApiService(auth.apiToken || sessionStorage.getItem('dashboard.token')!);
+
     const getServices = async () => {
-      const services = staticServices;
-      // const api = new BffApiService(auth.apiToken!);
-      // const services = await api.getServices();
-      services?.services.forEach((svc: IService, i: number) => {
+      // const services = staticServices;
+      if (serviceStore.services.length < 1) {
+        const theServices = (await api.getServices())?.services!;
+        serviceStore.addServices(theServices);
+      }
+      const services = (await api.getServices())?.services!;
+      services?.forEach((svc: IService, i: number) => {
         serviceNodes.push({ 
           id: svc.serviceName,
           data: { label: <div style={{
@@ -115,7 +121,7 @@ export default function Flow() {
       })
       setNodes(serviceNodes);
       setEdges(serviceEdges);
-      setServices(services!.services);
+      setServices(services!);
     }
     getServices();
   }, [])

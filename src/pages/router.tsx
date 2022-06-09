@@ -29,7 +29,7 @@ export default function Router() {
   function ProtectedRoute() {
     const path = useLocation().pathname;
     if (path !== '/login' && path !== '/') setPath(path)
-    console.log(savedPath)
+    // console.log(savedPath)
     return (loggedIn || sameSession)?<Outlet />:<Navigate to='/login' replace />;
   }
 
