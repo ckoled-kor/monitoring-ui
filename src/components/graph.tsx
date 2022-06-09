@@ -1,14 +1,12 @@
 import { CheckCircleTwoTone, ExclamationCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 import { useState, useCallback, createContext, useContext, useEffect } from 'react';
 import ReactFlow, {
-  addEdge,
   applyNodeChanges,
   applyEdgeChanges,
   Node,
   Edge,
   NodeChange,
   EdgeChange,
-  Connection,
   Background,
   Controls,
   MiniMap,
@@ -43,10 +41,6 @@ export default function Flow() {
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
-  );
-  const onConnect = useCallback(
-    (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
     [setEdges]
   );
   const onNodeClick = (event: React.MouseEvent, node: Node) => {
@@ -133,7 +127,6 @@ export default function Flow() {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
         onNodeClick={onNodeClick}
         fitView
       >
