@@ -3,17 +3,17 @@ import produce from 'immer';
 
 import { IService } from '../../interfaces';
 
-const addServices = (services: IService[], newServices: IService[]): IService[] => produce(services, draft => {
+const addServices = (services: IService[] | undefined, newServices: IService[]): IService[] => produce(services || [], draft => {
   draft.push(...newServices)
 })
 
 type ServiceStore = {
-  services: IService[];
+  services: IService[] | undefined;
   addServices: (newServices: IService[]) => void;
 }
 
 export const useServiceStore = create<ServiceStore>((set) => ({
-  services: [],
+  services: undefined,
   addServices(newServices: IService[]) {
     set((state) => ({
       ...state,

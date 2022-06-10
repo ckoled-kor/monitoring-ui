@@ -58,7 +58,8 @@ export default function Flow() {
 
     const getServices = async () => {
       // const services = staticServices;
-      if (serviceStore.services.length < 1) {
+      if (!serviceStore.services) {
+        console.log('called getservices');
         const theServices = (await api.getServices())?.services!;
         serviceStore.addServices(theServices);
       }
@@ -124,7 +125,7 @@ export default function Flow() {
       setServices(services!);
     }
     getServices();
-  }, [])
+  }, [auth.apiToken, serviceStore])
 
   return (
     <>

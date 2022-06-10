@@ -5,6 +5,7 @@ import styles from './layout.module.css'
 
 import 'antd/dist/antd.css';
 import { useAuth } from '../config/auth';
+import { closeSocket, initSocket } from '../services/bffApi/websocket';
 
 const { Header, Content, Footer } = Layout;
 
@@ -64,7 +65,9 @@ export default function GlobalLayout({ children, login }: any) {
         position: 'absolute',
         bottom: '0',
         width: '100%',
-      }}>Porsche Digital ©2022</Footer>
+      }}>Porsche Digital ©2022<button onClick={() => initSocket()}>
+        Test Websocket</button><button onClick={() => closeSocket()}>
+        Close Websocket</button></Footer>
     </Layout>
   );
 }
