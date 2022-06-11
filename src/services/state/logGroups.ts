@@ -1,4 +1,5 @@
 import create from 'zustand';
+import { persist } from 'zustand/middleware'
 
 import { ILogGroup } from '../../interfaces';
 
@@ -22,12 +23,16 @@ type LogGroupStore = {
   addLogGroups: (newLogGroups: ILogGroup[], name: string) => void;
 }
 
-export const useLogGroupStore = create<LogGroupStore>((set) => ({
-  logGroups: {},
-  addLogGroups(newLogGroups: ILogGroup[], name: string) {
-    set((state) => ({
-      ...state,
-      logGroups: addLogGroups(state.logGroups, newLogGroups, name)
-    }))
-  },
+export const useLogGroupStore = create(persist<LogGroupStore>(
+  (set) => ({
+    logGroups: {},
+    addLogGroups(newLogGroups: ILogGroup[], name: string) {
+      set((state) => ({
+        ...state,
+        logGroups: addLogGroups(state.logGroups, newLogGroups, name)
+      }))
+    },
+  }),{
+    name: 'logGroup.storage',
+    getStorage: () => sessionStorage
 }))

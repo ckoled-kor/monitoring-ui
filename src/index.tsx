@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Amplify } from 'aws-amplify';
 
+import './config/i18n'
 import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';

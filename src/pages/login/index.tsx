@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Input, Button } from 'antd';
 import { LeftOutlined, ArrowRightOutlined, LoadingOutlined } from '@ant-design/icons';
 
@@ -14,6 +15,7 @@ type IFormInput = {
 };
 
 export default function Login() {
+  const { t, i18n } = useTranslation();
   const { signIn, verifyCode } = useAuth();
   const { 
     control: eControl,
@@ -74,7 +76,7 @@ export default function Login() {
       <div className='center-div'>
         <div className='bg-image'/>
         <div className='login-div'>
-          <h1 style={{alignSelf:'center', fontSize:'3.3em', fontWeight:'bold'}}>Sign In</h1>
+          <h1 style={{alignSelf:'center', fontSize:'3.3em', fontWeight:'bold'}}>{t('login.signin')}</h1>
           {showCode?
             <form onSubmit={cSubmit(onCodeSubmit)} className='form-div'>
               <Input.Group compact size='large' style={{display:'flex', flexDirection:'row'}}>
@@ -91,7 +93,7 @@ export default function Login() {
                   size='large'
                   onClick={cSubmit(onCodeSubmit) as () => void}
                   icon={isLoading?<LoadingOutlined/>:''}>
-                    {!isLoading && 'Submit'}
+                    {!isLoading && t('login.submit')}
                 </Button>
               </Input.Group>
             </form>

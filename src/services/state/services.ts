@@ -1,4 +1,5 @@
 import create from 'zustand';
+import { persist } from 'zustand/middleware';
 import produce from 'immer';
 
 import { IService } from '../../interfaces';
@@ -12,7 +13,7 @@ type ServiceStore = {
   addServices: (newServices: IService[]) => void;
 }
 
-export const useServiceStore = create<ServiceStore>((set) => ({
+export const useServiceStore = create(persist<ServiceStore>((set) => ({
   services: undefined,
   addServices(newServices: IService[]) {
     set((state) => ({
@@ -20,4 +21,7 @@ export const useServiceStore = create<ServiceStore>((set) => ({
       services: addServices(state.services, newServices)
     }))
   },
+}),{
+  name: 'service.storage',
+  getStorage: () => sessionStorage
 }))
