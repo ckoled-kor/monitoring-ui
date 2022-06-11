@@ -1,6 +1,7 @@
 import { useState, createContext, useCallback, ReactNode, useContext } from 'react'
 import { Auth } from 'aws-amplify'
 import { BffApiService } from '../services/bffApi'
+import { closeSocket } from '../services/bffApi/websocket'
 
 interface ICognitoUserSession {
   userAuthToken: string
@@ -83,6 +84,7 @@ const AuthProvider = (props: IAuthProviderProps) => {
     setApiToken(null)
     setCognitoUser(null)
     sessionStorage.clear()
+    closeSocket()
   }, [])
 
   const currentSession = useCallback(async () => {

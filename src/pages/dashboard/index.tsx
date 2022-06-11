@@ -8,7 +8,8 @@ import { initSocket, socket } from '../../services/bffApi/websocket';
 export default function Dashboard() {
   document.title='Dashboard | Monitoring App';
   useEffect(() => {
-    // if (!socket || socket.readyState === WebSocket.CLOSED) initSocket()
+    // commented out cuz changing websocket.js sets socket to undefined while still open
+    if ((!socket || socket.readyState === WebSocket.CLOSED)) initSocket()
     console.log(socket)
   }, [])
   return (

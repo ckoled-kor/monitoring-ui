@@ -5,17 +5,19 @@ import styles from './layout.module.css'
 
 import 'antd/dist/antd.css';
 import { useAuth } from '../config/auth';
-import { closeSocket, initSocket } from '../services/bffApi/websocket';
+import { useNavigate } from 'react-router-dom';
+// import { closeSocket, initSocket } from '../services/bffApi/websocket';
 
 const { Header, Content, Footer } = Layout;
 
 export default function GlobalLayout({ children, login }: any) {
-
   const auth = useAuth();
+  const nav = useNavigate();
 
   const onLogout = async () => {
     try {
       await auth.signOut();
+      nav('/login', { replace: true })
     } catch (e) {
       console.log(e)
     }
@@ -65,9 +67,11 @@ export default function GlobalLayout({ children, login }: any) {
         position: 'absolute',
         bottom: '0',
         width: '100%',
-      }}>Porsche Digital ©2022<button onClick={() => initSocket()}>
+      }}>Porsche Digital ©2022
+      {/* <button onClick={() => initSocket()}>
         Test Websocket</button><button onClick={() => closeSocket()}>
-        Close Websocket</button></Footer>
+        Close Websocket</button> */}
+        </Footer>
     </Layout>
   );
 }
