@@ -24,7 +24,7 @@ export default function Router() {
       }
     }
     checkSession()
-  }, [isAuthenticated, loggedIn, sameSession])
+  }, [useAuth, sameSession])
 
   function ProtectedRoute() {
     const path = useLocation().pathname;

@@ -2,13 +2,18 @@ import create from 'zustand';
 
 import { ILogGroup } from '../../interfaces';
 
-type LogGroupState = {
+export type LogGroupState = {
   [key: string]: ILogGroup[]
 }
 
-const addLogGroups = (logGroups: LogGroupState, newLogGroups: ILogGroup[], name: string): LogGroupState => {
+export const addLogGroups = (logGroups: LogGroupState, newLogGroups: ILogGroup[], name: string): LogGroupState => {
   const newState = {...logGroups}
-  newState[name] = newLogGroups
+  if (newState[name]) {
+    const filtered = newLogGroups.filter((lg) => !newState[name].some((slg) => slg.logGroupId === lg.logGroupId))
+    newState[name] = [...newState[name], ...filtered]
+  }
+  else
+    newState[name] = newLogGroups
   return newState;
 }
 

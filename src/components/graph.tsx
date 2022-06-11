@@ -64,7 +64,11 @@ export default function Flow() {
         serviceStore.addServices(theServices);
       }
       const services = (await api.getServices())?.services!;
+      const xw = 150;
+      const yw = 70;
+      let y = -1*yw;
       services?.forEach((svc: IService, i: number) => {
+        if ((i%(Math.floor(Math.sqrt(services.length)))) === 0) y+=yw
         serviceNodes.push({ 
           id: svc.serviceName,
           data: { label: <div style={{
@@ -103,7 +107,7 @@ export default function Flow() {
               fontWeight: 'bold'
             }}/>}
           </div>, name: svc.serviceName },
-          position: { x: 0, y: 100*i },
+          position: { x: xw*(i%(Math.floor(Math.sqrt(services.length)))), y },
           style: {
             width: 120
           }

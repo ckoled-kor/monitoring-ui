@@ -1,7 +1,6 @@
 import { useState, createContext, useCallback, ReactNode, useContext } from 'react'
 import { Auth } from 'aws-amplify'
 import { BffApiService } from '../services/bffApi'
-import { initSocket } from '../services/bffApi/websocket'
 
 interface ICognitoUserSession {
   userAuthToken: string
@@ -74,7 +73,6 @@ const AuthProvider = (props: IAuthProviderProps) => {
       setLoggedIn(true)
       setApiToken(newApiToken)
       sessionStorage.setItem('dashboard.token', newApiToken!)
-      initSocket()
     }
     return isOkAuth
   }
