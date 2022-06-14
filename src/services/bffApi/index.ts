@@ -35,8 +35,8 @@ export class BffApiService {
     return response?.data
   }
 
-  public async getServices(apiToken?: string): Promise<{ services: IService[] } | null> {
-    const url = `${this.baseUrl}/services`
+  public async getServices(apiToken?: string, since?: string): Promise<{ services: IService[] } | null> {
+    const url = `${this.baseUrl}/services?since=${since || ''}`
     const response = await axios.request({
       method: 'GET',
       url,
@@ -45,8 +45,8 @@ export class BffApiService {
     return response?.data
   }
 
-  public async getLogGroups(serviceName: string, apiToken?: string): Promise<{ logGroups: ILogGroup[] } | null> {
-    const url = `${this.baseUrl}/loggroups/${serviceName}`
+  public async getLogGroups(serviceName: string, apiToken?: string, since?: string): Promise<{ logGroups: ILogGroup[] } | null> {
+    const url = `${this.baseUrl}/loggroups/${serviceName}?since=${since || ''}`
     const response = await axios.request({
       method: 'GET',
       url,
@@ -83,3 +83,5 @@ export class BffApiService {
     }
   }
 }
+
+export const bff = new BffApiService();

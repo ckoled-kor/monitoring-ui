@@ -1,3 +1,4 @@
+import { bff } from '.';
 import { ILogGroup, IService } from '../../interfaces';
 import { useLogGroupStore, LogGroupState, addLogGroups } from '../state/logGroups';
 import { useServiceStore } from '../state/services';
@@ -8,6 +9,7 @@ interface IEvent {
   logGroup?: ILogGroup
 }
 
+let lastEvent: string;
 export let socket: WebSocket;
 
 export const initSocket = async () => {
@@ -17,10 +19,22 @@ export const initSocket = async () => {
     const idToken = user.signInUserSession.idToken.jwtToken
     socket = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_URL!}?idToken=${idToken}`)
     socket.onopen = (event: any) => {
-      console.log('opened');
+      console.log('websocket opened');
+    }
+    socket.onerror = async (err: any) => {
+      console.log('websocket error');
+      const token = sessionStorage.getItem('dashboard.token');
+      const newServices = (await bff.getServices(token!, lastEvent)) || {services: []};
+      useServiceStore.setState({...useServiceStore.getState(), services: [...(useServiceStore.getState().services || []), ...newServices.services]})
+      Object.keys(useLogGroupStore.getState().logGroups).forEach(async (svcName) => {
+        const newLogGroups = (await bff.getLogGroups(svcName, token!, lastEvent)) || {logGroups: []};
+        const temp: LogGroupState = addLogGroups(useLogGroupStore.getState().logGroups, newLogGroups.logGroups, svcName)
+        useLogGroupStore.setState({...useLogGroupStore.getState(), logGroups: {...temp}})
+      })
     }
     socket.onmessage = (event: MessageEvent) => {
       console.log(event.data);
+      lastEvent = new Date().toISOString();
       JSON.parse(event.data).events.forEach((ev: IEvent) => {
         if (ev.eventType === 'CREATE') {
           if (ev.service) {
@@ -45,6 +59,9 @@ export const initSocket = async () => {
         }
       })
     }
+    socket.onclose = (event: any) => {
+      console.log('websocket closed');
+    }
   } catch (e) {
     console.log(e)
   }
@@ -53,7 +70,6 @@ export const initSocket = async () => {
 export const closeSocket = () => {
   try {
     socket?.close()
-    console.log('closed')
   } catch (e) {
     console.log(e);
   }
