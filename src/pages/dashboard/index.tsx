@@ -3,14 +3,14 @@ import Flow from '../../components/graph';
 
 import './dashboard.css';
 import { useEffect } from 'react';
-import { initSocket, socket } from '../../services/bffApi/websocket';
+import s from '../../services/bffApi/websocket';
 
 export default function Dashboard() {
   document.title='Dashboard | Monitoring App';
   useEffect(() => {
     // commented out cuz changing websocket.js sets socket to undefined while still open
-    if ((!socket || socket.readyState === WebSocket.CLOSED)) initSocket()
-    console.log(socket)
+    if ((!s.socket || s.socket.readyState === WebSocket.CLOSED)) s.initSocket()
+    console.log(s.socket)
   }, [])
   return (
     <GlobalLayout>

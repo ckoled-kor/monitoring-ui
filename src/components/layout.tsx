@@ -6,7 +6,7 @@ import styles from './layout.module.css'
 import 'antd/dist/antd.css';
 import { useAuth } from '../config/auth';
 import { useNavigate } from 'react-router-dom';
-// import { closeSocket, initSocket } from '../services/bffApi/websocket';
+import socket from '../services/bffApi/websocket';
 
 const { Header, Content, Footer } = Layout;
 
@@ -68,8 +68,8 @@ export default function GlobalLayout({ children, login }: any) {
         bottom: '0',
         width: '100%',
       }}>Porsche Digital ©2022
-      {/* <button onClick={() => initSocket()}>
-        Test Websocket</button><button onClick={() => closeSocket()}>
+      {/* <button onClick={() => socket.initSocket()}>
+        Test Websocket</button><button onClick={() => socket.closeSocket()}>
         Close Websocket</button> */}
         </Footer>
     </Layout>
