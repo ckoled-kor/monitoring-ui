@@ -3,7 +3,6 @@ import { UserOutlined } from '@ant-design/icons';
 
 import styles from './layout.module.css'
 
-import 'antd/dist/antd.css';
 import { useAuth } from '../config/auth';
 import { useNavigate } from 'react-router-dom';
 import socket from '../services/bffApi/websocket';

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { Amplify } from 'aws-amplify';
 
 import './config/i18n'
-import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
 
@@ -20,9 +19,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
 );
 
 // If you want to start measuring performance in your app, pass a function

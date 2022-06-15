@@ -1,9 +1,10 @@
+import { useEffect } from 'react';
+
 import GlobalLayout from '../../components/layout';
 import Flow from '../../components/graph';
+import s from '../../services/bffApi/websocket';
 
 import './dashboard.css';
-import { useEffect } from 'react';
-import s from '../../services/bffApi/websocket';
 
 export default function Dashboard() {
   document.title='Dashboard | Monitoring App';
