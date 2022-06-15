@@ -15,7 +15,7 @@ import ReactFlow, {
 import Popup from 'reactjs-popup';
 
 import { useAuth } from '../config/auth';
-import { BffApiService } from '../services/bffApi';
+import { bffApi } from '../services/bffApi';
 import { IService } from '../interfaces';
 
 import ServiceInfo from './serviceInfo';
@@ -54,16 +54,16 @@ export default function Flow() {
   useEffect(() => {
     const serviceNodes: Node[] = [];
     const serviceEdges: Edge[] = [];
-    const api = new BffApiService(auth.apiToken || sessionStorage.getItem('dashboard.token')!);
 
     const getServices = async () => {
+      const token = (await auth.currentSession())?.apiToken || sessionStorage.getItem('dashboard.token');
       // const services = staticServices;
       if (!serviceStore.services) {
         console.log('called getservices');
-        const theServices = (await api.getServices())?.services!;
+        const theServices = (await bffApi.getServices(token!))?.services!;
         serviceStore.addServices(theServices);
       }
-      const services = (await api.getServices())?.services!;
+      const services = serviceStore.services;
       const xw = 150;
       const yw = 70;
       let y = -1*yw;
@@ -129,7 +129,7 @@ export default function Flow() {
       setServices(services!);
     }
     getServices();
-  }, [auth.apiToken, serviceStore])
+  }, [auth, auth.apiToken, serviceStore])
 
   return (
     <>

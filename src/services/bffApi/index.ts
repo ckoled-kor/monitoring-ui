@@ -4,14 +4,12 @@ import {ILogGroup, IService} from '../../interfaces'
 
 export class BffApiService {
   private readonly baseUrl: string | undefined
-  private readonly apiToken: string | undefined
   /**
    *
    */
-  constructor(apiToken?: string) {
+  constructor() {
     axiosRetry(axios, { retries: 3, retryDelay: this.retryFunction() })
     this.baseUrl = process.env.REACT_APP_API_BASE_URL
-    this.apiToken = apiToken
   }
 
   public async exchangeToken(authToken: string): Promise<string | null> {
@@ -35,22 +33,22 @@ export class BffApiService {
     return response?.data
   }
 
-  public async getServices(apiToken?: string, since?: string): Promise<{ services: IService[] } | null> {
+  public async getServices(apiToken: string, since?: string): Promise<{ services: IService[] } | null> {
     const url = `${this.baseUrl}/services?since=${since || ''}`
     const response = await axios.request({
       method: 'GET',
       url,
-      headers: { Authorization: `Bearer ${apiToken || this.apiToken}` }
+      headers: { Authorization: `Bearer ${apiToken}` }
     })
     return response?.data
   }
 
-  public async getLogGroups(serviceName: string, apiToken?: string, since?: string): Promise<{ logGroups: ILogGroup[] } | null> {
+  public async getLogGroups(serviceName: string, apiToken: string, since?: string): Promise<{ logGroups: ILogGroup[] } | null> {
     const url = `${this.baseUrl}/loggroups/${serviceName}?since=${since || ''}`
     const response = await axios.request({
       method: 'GET',
       url,
-      headers: { Authorization: `Bearer ${apiToken || this.apiToken}` }
+      headers: { Authorization: `Bearer ${apiToken}` }
     })
     return response?.data
   }
@@ -84,4 +82,4 @@ export class BffApiService {
   }
 }
 
-export const bff = new BffApiService();
+export const bffApi = new BffApiService();

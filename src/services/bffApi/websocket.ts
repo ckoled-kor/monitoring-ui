@@ -1,4 +1,5 @@
-import { bff } from '.';
+import { Auth } from 'aws-amplify';
+import { bffApi } from '.';
 import { ILogGroup, IService } from '../../interfaces';
 import { useLogGroupStore, LogGroupState, addLogGroups } from '../state/logGroups';
 import { useServiceStore } from '../state/services';
@@ -12,31 +13,29 @@ interface IEvent {
 export class BffSocket {
   private readonly reconnectAttempts: number;
   private attempt: number;
-  private lastEvent: string;
+  private lastEvent: string | undefined;
   public socket: WebSocket | undefined;
 
   constructor(attempts?: number) {
     this.reconnectAttempts = attempts || 50;
-    this.lastEvent = '';
+    this.lastEvent = undefined;
     this.socket = undefined;
     this.attempt = 0;
   }
 
   async initSocket() {
     try {
-      const user = JSON.parse(sessionStorage.getItem('dashboard.user')!)
-      console.log(user)
-      const idToken = user.signInUserSession.idToken.jwtToken
-      this.socket = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_URL!}?idToken=${idToken}`)
+      const toks = await getTok();
+      console.log(toks)
+      this.socket = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_URL!}?idToken=${toks?.idToken}`)
       this.socket.onopen = async (event: any) => {
         console.log('websocket opened');
         this.attempt = 0;
         if (this.lastEvent) {
-          const token = sessionStorage.getItem('dashboard.token');
-          const newServices = (await bff.getServices(token!, this.lastEvent)) || {services: []};
+          const newServices = (await bffApi.getServices(toks?.apiToken!, this.lastEvent)) || {services: []};
           useServiceStore.setState({...useServiceStore.getState(), services: [...(useServiceStore.getState().services || []), ...newServices.services]})
           Object.keys(useLogGroupStore.getState().logGroups).forEach(async (svcName) => {
-            const newLogGroups = (await bff.getLogGroups(svcName, token!, this.lastEvent)) || {logGroups: []};
+            const newLogGroups = (await bffApi.getLogGroups(svcName, toks?.apiToken!, this.lastEvent)) || {logGroups: []};
             const temp: LogGroupState = addLogGroups(useLogGroupStore.getState().logGroups, newLogGroups.logGroups, svcName)
             useLogGroupStore.setState({...useLogGroupStore.getState(), logGroups: {...temp}})
           })
@@ -94,6 +93,7 @@ export class BffSocket {
   closeSocket() {
     try {
       this.attempt = this.reconnectAttempts;
+      this.lastEvent = undefined;
       this.socket?.close();
     } catch (e) {
       console.log(e);
@@ -101,3 +101,41 @@ export class BffSocket {
   }
 }
 export default new BffSocket(20);
+
+const getTok = async () => {
+  let apiToken = '';
+  let authTokenKey = ''
+    for (let item in sessionStorage) {
+      if (item.match(/accessToken/)) {
+        authTokenKey = item
+        break
+      }
+    }
+    const prevAccessToken = authTokenKey === '' ? '' : sessionStorage.getItem(authTokenKey)
+    try {
+      const session = await Auth.currentSession()
+
+      if (session.isValid()) {
+        // getting new api token if access token expired
+        const currentAccessToken = session.getAccessToken()?.getJwtToken()
+        if (prevAccessToken !== currentAccessToken) {
+          bffApi.exchangeToken(currentAccessToken).then((newApiToken) => {
+            apiToken = newApiToken!;
+            sessionStorage.setItem('dashboard.token', newApiToken!)
+          })
+        }
+
+        return { idToken: session.getIdToken().getJwtToken(), apiToken: apiToken! }
+      }
+    } catch (err) {
+      await Auth.signOut()
+      sessionStorage.clear()
+      if (
+        !(err instanceof Error && err.name === 'NotAuthorizedException') &&
+        !(err as string).match(/No current user/)
+      ) {
+        throw err
+      }
+    }
+    return null
+}

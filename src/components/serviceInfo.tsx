@@ -6,7 +6,7 @@ import date from 'date-and-time';
 import { usePopupContext } from './graph';
 
 import styles from './serviceInfo.module.css';
-import { BffApiService } from '../services/bffApi';
+import { bffApi } from '../services/bffApi';
 import { useAuth } from '../config/auth';
 import { ILogGroup, IService } from '../interfaces';
 import { useLogGroupStore } from '../services/state/logGroups';
@@ -24,13 +24,13 @@ export default function ServiceInfo({ service }: {service: IService}) {
   }
 
   useEffect(() => {
-    const api = new BffApiService(auth.apiToken || sessionStorage.getItem('dashboard.token')!)
     const getData = async () => {
+      const token = (await auth.currentSession())?.apiToken || sessionStorage.getItem('dashboard.token');
       // const logs: ILogGroup[] = staticlogs[service.serviceName];
       // await new Promise(r => setTimeout(r, 1000));
       if (!logGroups) {
         console.log('called getloggroups')
-        const theLogs = (await api.getLogGroups(service.serviceName))?.logGroups!;
+        const theLogs = (await bffApi.getLogGroups(service.serviceName, token!))?.logGroups!;
         logGroupStore.addLogGroups(theLogs, service.serviceName);
       }
       // const logs = logGroupStore.logGroups[service.serviceName] || [];
@@ -38,7 +38,7 @@ export default function ServiceInfo({ service }: {service: IService}) {
     }
     console.log(logGroupStore.logGroups)
     getData();
-  }, [auth.apiToken, logGroupStore, logGroups, service.serviceName]);
+  }, [auth, auth.apiToken, logGroupStore, logGroups, service.serviceName]);
 
   return (
     <div className={styles.content_div}>
