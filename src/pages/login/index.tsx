@@ -15,7 +15,7 @@ type IFormInput = {
 };
 
 export default function Login() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { signIn, verifyCode } = useAuth();
   const { 
     control: eControl,
@@ -84,8 +84,15 @@ export default function Login() {
                 <Controller
                   name="code"
                   control={cControl}
-                  rules={{ required: true, pattern: /^\d{4}$/}}
-                  render={({ field }) => <Input {...field} status={codeError?'error':''} placeholder='0000' autoComplete='off' />}
+                  rules={{ 
+                    required: true, 
+                    pattern: /^\d{4}$/
+                  }}
+                  render={({ field }) => <Input {...field} 
+                    status={codeError?'error':''} 
+                    placeholder='0000' 
+                    autoComplete='off' 
+                  />}
                 />
                 <Button
                   type={cState.isValid?'primary':'default'}
@@ -103,7 +110,11 @@ export default function Login() {
                 <Controller
                   name="email"
                   control={eControl}
-                  rules={{ required: true, pattern: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/}}
+                  rules={{ 
+                    required: true, 
+                    // eslint-disable-next-line no-useless-escape
+                    pattern: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                  }}
                   render={({ field }) => <Input {...field}
                     status={emailError?'error':''}
                     placeholder='email@example.com'

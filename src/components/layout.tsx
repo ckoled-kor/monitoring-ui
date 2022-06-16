@@ -1,22 +1,21 @@
 import { Button, Dropdown, Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 import styles from './layout.module.css'
 
 import { useAuth } from '../config/auth';
-import { useNavigate } from 'react-router-dom';
-import socket from '../services/bffApi/websocket';
+// import socket from '../services/bffApi/websocket';
 
 const { Header, Content, Footer } = Layout;
 
 export default function GlobalLayout({ children, login }: any) {
+  const { t } = useTranslation();
   const auth = useAuth();
-  const nav = useNavigate();
 
   const onLogout = async () => {
     try {
       await auth.signOut();
-      nav('/login', { replace: true })
     } catch (e) {
       console.log(e)
     }
@@ -41,7 +40,7 @@ export default function GlobalLayout({ children, login }: any) {
             {
               key: '1',
               label: (
-                <Button type='text' size='small' danger onClick={onLogout}>Logout</Button>
+                <Button type='text' size='small' danger onClick={onLogout}>{t('layout.logout')}</Button>
               ),
             }
           ]}

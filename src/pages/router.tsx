@@ -8,9 +8,6 @@ import { useEffect, useState } from 'react';
 import { Profile } from './profile';
 
 let savedPath = '/dashboard';
-const setPath = (path: string) => {
-  savedPath = path;
-}
 
 export default function Router() {
   const { loggedIn, isAuthenticated } = useAuth();
@@ -18,17 +15,16 @@ export default function Router() {
 
   useEffect(() => {
     const checkSession = async () => {
+      // should set logged in to true changing auth doesn't update context state for some reason
       const authed = await isAuthenticated();
-      if (!loggedIn && !sameSession) {
-        setSameSession(authed);
-      }
+      setSameSession(authed);
     }
     checkSession()
   }, [sameSession, isAuthenticated, loggedIn])
 
   function ProtectedRoute() {
     const path = useLocation().pathname;
-    if (path !== '/login' && path !== '/') setPath(path)
+    if (path !== '/login' && path !== '/') savedPath = path
     // console.log(savedPath)
     return (loggedIn || sameSession)?<Outlet />:<Navigate to='/login' replace />;
   }

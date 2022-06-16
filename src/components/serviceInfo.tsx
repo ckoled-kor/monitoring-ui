@@ -2,21 +2,23 @@ import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Divider, List } from 'antd';
 import { useEffect } from 'react';
 import date from 'date-and-time';
-
-import { usePopupContext } from './graph';
+import { useTranslation } from 'react-i18next';
 
 import styles from './serviceInfo.module.css';
 import { bffApi } from '../services/bffApi';
 import { useAuth } from '../config/auth';
 import { ILogGroup, IService } from '../interfaces';
 import { useLogGroupStore } from '../services/state/logGroups';
+import { usePopupContext } from './graph';
 
 // const staticlogs = require('./logGroups.json');
 
 export default function ServiceInfo({ service }: {service: IService}) {
+  const { t } = useTranslation();
   const auth = useAuth();
   const logGroupStore = useLogGroupStore();
   const logGroups = logGroupStore.logGroups[service.serviceName];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showModal, setShowModal] = usePopupContext();
 
   const close = () => {
@@ -45,20 +47,39 @@ export default function ServiceInfo({ service }: {service: IService}) {
       <Button className={styles.exit} type='text' icon={<CloseOutlined />} danger onClick={close}/>
       <h1 className={styles.title}>{service.serviceName}</h1>
       <Divider className={styles.divider} />
-      <p className={styles.status}>Status:&nbsp;{<span style={{color:service.healthStatus.status==='UP'?'green':'red', fontWeight:'bold'}}>{service.healthStatus.status}</span>}</p>
-      <p className={styles.contact}>Contact Info: {service.contactInfo?.name} {<a href={`mailto:${service.contactInfo?.email}`}>{service.contactInfo?.email}</a>}</p>
-      <p className={styles.team}>Team: {service.team}</p>
-      <p className={styles.last_update}>Last Update: {date.format(new Date(service.lastUpdateTS), 'YYYY/MM/DD HH:mm:ss')}</p>
-      <p className={styles.error_status}>Log Error Status:&nbsp;{service.logErrorStatus?<span style={{color:'red', fontWeight:'bold'}}>{service.logErrorStatus}</span>:<span style={{color:'green', fontWeight:'bold'}}>OK</span>} {service.lastLogEventsWithErrorsTS && date.format(new Date(service.lastLogEventsWithErrorsTS), 'YYYY/MM/DD HH:mm:ss')}</p>
-      <Divider className={styles.list_divider} orientation='left'>Log Groups</Divider>
+      <p className={styles.status}>{t('serviceInfo.status')}:&nbsp;{
+        <span style={{color:service.healthStatus.status==='UP'?'green':'red', fontWeight:'bold'}}>
+          {service.healthStatus.status}
+        </span>
+      }</p>
+      <p className={styles.contact}>{t('serviceInfo.contactInfo')}: {service.contactInfo?.name} {
+        <a href={`mailto:${service.contactInfo?.email}`}>{service.contactInfo?.email}</a>
+      }</p>
+      <p className={styles.team}>{t('serviceInfo.team')}: {service.team}</p>
+      <p className={styles.last_update}>{t('serviceInfo.lastUpdate')}: {
+        date.format(new Date(service.lastUpdateTS), 'YYYY/MM/DD HH:mm:ss')
+      }</p>
+      <p className={styles.error_status}>{t('serviceInfo.logErrorStatus')}:&nbsp;{
+        service.logErrorStatus?
+          <span style={{color:'red', fontWeight:'bold'}}>{service.logErrorStatus}</span>
+          :<span style={{color:'green', fontWeight:'bold'}}>OK</span>
+      } {
+        service.lastLogEventsWithErrorsTS && 
+        date.format(new Date(service.lastLogEventsWithErrorsTS), 'YYYY/MM/DD HH:mm:ss')
+      }</p>
+      <Divider className={styles.list_divider} orientation='left'>{t('serviceInfo.logGroups')}</Divider>
       {!logGroups?<LoadingOutlined className={styles.loading}/>:
         <List
           className={styles.list}
           dataSource={logGroups}
           renderItem={(logGroup: ILogGroup) => (
             <List.Item className={styles.list_item}>
-              <a href={logGroup.logGroupLink} className={styles.log} style={{color:(logGroup.logErrorStatus)?'red':'inherit'}}>{logGroup.logGroupName}</a>
-              <span style={{marginRight:'5px', fontSize: '12px'}}>{date.format(new Date(logGroup.lastUpdateTS), 'YYYY/MM/DD HH:mm:ss')}</span>
+              <a href={logGroup.logGroupLink} className={styles.log} style={{
+                color:(logGroup.logErrorStatus)?'red':'inherit'
+              }}>{logGroup.logGroupName}</a>
+              <span style={{marginRight:'5px', fontSize: '12px'}}>{
+                date.format(new Date(logGroup.lastUpdateTS), 'YYYY/MM/DD HH:mm:ss')
+              }</span>
             </List.Item>
           )}
         />

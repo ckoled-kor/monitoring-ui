@@ -103,7 +103,7 @@ export class BffSocket {
 export default new BffSocket(20);
 
 const getTok = async () => {
-  let apiToken = '';
+  let apiToken = sessionStorage.getItem('dashboard.token');
   let authTokenKey = ''
     for (let item in sessionStorage) {
       if (item.match(/accessToken/)) {

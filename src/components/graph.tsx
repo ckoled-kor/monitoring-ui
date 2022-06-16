@@ -1,4 +1,3 @@
-import { CheckCircleTwoTone, ExclamationCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 import { useState, useCallback, createContext, useContext, useEffect } from 'react';
 import ReactFlow, {
   applyNodeChanges,
@@ -9,7 +8,7 @@ import ReactFlow, {
   EdgeChange,
   Background,
   Controls,
-  MiniMap,
+  // MiniMap,
   MarkerType
 } from 'react-flow-renderer';
 import Popup from 'reactjs-popup';
@@ -20,6 +19,7 @@ import { IService } from '../interfaces';
 
 import ServiceInfo from './serviceInfo';
 import { useServiceStore } from '../services/state/services';
+import ServiceNode from './serviceNode';
 
 // const staticServices = require('./services.json');
 
@@ -71,42 +71,7 @@ export default function Flow() {
         if ((i%(Math.floor(Math.sqrt(services.length)))) === 0) y+=yw
         serviceNodes.push({ 
           id: svc.serviceName,
-          data: { label: <div style={{
-            width: '115%',
-            margin: '-8px 0px -13px -8px',
-            display: 'grid',
-            gridAutoColumns: '10%'
-          }}>
-            <h3 style={{
-              gridRow: 1,
-              gridColumnStart: 2,
-              gridColumnEnd: 10,
-              justifySelf: 'center'
-            }}>{svc.serviceName}</h3>
-            {svc.healthStatus.status.match(/^(UP|OK)$/)?<CheckCircleTwoTone twoToneColor="#52c41a" style={{
-              gridRow: 1,
-              gridColumn: 10,
-              justifySelf: 'end',
-              fontSize: 10,
-              fontWeight: 'bold'
-            }}/>:
-            <ExclamationCircleTwoTone twoToneColor='red' style={{
-              gridRow: 1,
-              gridColumn: 10,
-              justifySelf: 'end',
-              fontSize: 10,
-              fontWeight: 'bold'
-            }}/>}
-            {svc.logErrorStatus && <WarningTwoTone twoToneColor='orange' style={{
-              gridRow: 1,
-              gridColumn: 10,
-              justifySelf: 'end',
-              alignSelf: 'end',
-              marginBottom: '5px',
-              fontSize: 10,
-              fontWeight: 'bold'
-            }}/>}
-          </div>, name: svc.serviceName },
+          data: { label: <ServiceNode svc={svc}/>, name: svc.serviceName },
           position: { x: xw*(i%(Math.floor(Math.sqrt(services.length)))), y },
           style: {
             width: 120
