@@ -9,7 +9,7 @@ import './dashboard.css';
 export default function Dashboard() {
   useEffect(() => {
     // commented out cuz changing websocket.js sets socket to undefined while still open
-    // if ((!s.socket || s.socket.readyState === WebSocket.CLOSED)) s.initSocket()
+    if ((!s.socket || s.socket.readyState === WebSocket.CLOSED)) s.initSocket()
     console.log(s.socket)
   }, [])
   

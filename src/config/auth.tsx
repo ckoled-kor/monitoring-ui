@@ -74,7 +74,6 @@ const AuthProvider = (props: IAuthProviderProps) => {
       setLoggedIn(true)
       setApiToken(newApiToken)
       sessionStorage.setItem('dashboard.token', newApiToken!)
-      socket.initSocket()
     }
     return isOkAuth
   }
