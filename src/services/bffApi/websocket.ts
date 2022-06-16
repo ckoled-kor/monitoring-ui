@@ -43,6 +43,7 @@ export class BffSocket {
       }
       this.socket.onerror = (err: any) => {
         console.log('websocket error');
+        this.attempt = 0;
         this.socket?.close()
       }
       this.socket.onmessage = (event: MessageEvent) => {
