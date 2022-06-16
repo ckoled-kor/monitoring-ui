@@ -80,11 +80,11 @@ export class BffSocket {
         console.log('websocket closed' + this.attempt);
         this.lastEvent = new Date().toISOString();
         if (this.attempt < this.reconnectAttempts) {
-          this.attempt++;
-          console.log(`Attempt ${this.attempt}, reconnect in ${3+(0.5*this.attempt^2)}s`);
-          setTimeout(this.initSocket, 1000*(3+(0.5*this.attempt^2)));
+          this.attempt += 1;
+          console.log(`Attempt ${this.attempt}, reconnect in ${3+(0.5*(this.attempt**2))}s`);
+          setTimeout(() => this.initSocket(), 1000*(3+(0.5*(this.attempt**2))));
         } else
-          this.attempt = 0
+          this.attempt = 0;
       }
     } catch (e) {
       console.log(e)
