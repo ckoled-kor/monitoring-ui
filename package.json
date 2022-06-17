@@ -2,7 +2,9 @@
   "name": "monitoring-ui",
   "version": "0.1.0",
   "private": true,
-  "main": "public/main.js",
+  "author": "Christian Daga",
+  "description": "Monitoring UI Protoype",
+  "main": "public/electron.js",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@testing-library/jest-dom": "^5.16.4",
@@ -17,7 +19,6 @@
     "axios": "^0.27.2",
     "axios-retry": "^3.2.5",
     "date-and-time": "^2.3.1",
-    "electron": "^19.0.4",
     "i18next": "^21.8.9",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -37,7 +38,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-dev": "electron ."
+    "electron:start": "electron .",
+    "electron:package:mac": "electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "electron:package:win": "electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "electron:package:linux": "electron-builder -l -c.extraMetadata.main=build/electron.js"
   },
   "eslintConfig": {
     "extends": [
@@ -57,9 +61,27 @@
       "last 1 safari version"
     ]
   },
+  "build": {
+    "appId": "com.christian.monitoringui",
+    "productName": "Monitoring UI",
+    "files": ["build/**/*", "node_modules/**/*"],
+    "directories": {
+      "buildResources": "public"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "deb"
+    }
+  },
   "devDependencies": {
     "@types/websocket": "^1.0.5",
     "less": "^4.1.3",
-    "less-loader": "^11.0.0"
+    "less-loader": "^11.0.0",
+    "electron": "^19.0.4"
   }
 }
