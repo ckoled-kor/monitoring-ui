@@ -26,3 +26,11 @@ Runs the app in a development version of electron.
 ### `npm run electron:package:<target>`
 
 Package electron build for target os. Requires build
+
+## Images
+
+![Login](https://i.imgur.com/sz3wJlv.png)
+
+![Dashboard](https://i.imgur.com/SVaOlOY.png)
+
+![Service Info](https://i.imgur.com/EzjTemI.png)
