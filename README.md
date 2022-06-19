@@ -19,6 +19,10 @@ Builds the app for production to the `build` folder.
 
 Ejects
 
-### `npm run electron-dev`
+### `npm run electron:start`
 
 Runs the app in a development version of electron.
+
+### `npm run electron:package:<target>`
+
+Package electron build for target os. Requires build
