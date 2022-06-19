@@ -21,7 +21,7 @@ import ServiceInfo from './serviceInfo';
 import { useServiceStore } from '../services/state/services';
 import ServiceNode from './serviceNode';
 
-// const staticServices = require('./services.json');
+const staticServices = require('./services.json');
 
 const initialNodes: Node[] = [];
 const initialEdges: Edge[] = [];
@@ -57,7 +57,7 @@ export default function Flow() {
 
     const getServices = async () => {
       const token = (await auth.currentSession())?.apiToken || sessionStorage.getItem('dashboard.token');
-      // const services = staticServices;
+      // const services = staticServices.services;
       if (!serviceStore.services) {
         console.log('called getservices');
         const theServices = (await bffApi.getServices(token!))?.services!;
@@ -66,13 +66,13 @@ export default function Flow() {
       const services = serviceStore.services;
       const xw = 150;
       const yw = 70;
-      let y = -1*yw;
+      let x = -1*xw;
       services?.forEach((svc: IService, i: number) => {
-        if ((i%(Math.floor(Math.sqrt(services.length)))) === 0) y+=yw
+        if ((i%(Math.floor(Math.sqrt(services.length)))) === 0) x+=xw
         serviceNodes.push({ 
           id: svc.serviceName,
           data: { label: <ServiceNode svc={svc}/>, name: svc.serviceName },
-          position: { x: xw*(i%(Math.floor(Math.sqrt(services.length)))), y },
+          position: { x, y: yw*(i%(Math.floor(Math.sqrt(services.length)))) },
           style: {
             width: 120
           }

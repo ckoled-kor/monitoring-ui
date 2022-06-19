@@ -18,6 +18,7 @@ export default function ServiceInfo({ service }: {service: IService}) {
   const auth = useAuth();
   const logGroupStore = useLogGroupStore();
   const logGroups = logGroupStore.logGroups[service.serviceName];
+  // const logGroups: ILogGroup[] = staticlogs[service.serviceName];
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showModal, setShowModal] = usePopupContext();
 
@@ -28,15 +29,11 @@ export default function ServiceInfo({ service }: {service: IService}) {
   useEffect(() => {
     const getData = async () => {
       const token = (await auth.currentSession())?.apiToken || sessionStorage.getItem('dashboard.token');
-      // const logs: ILogGroup[] = staticlogs[service.serviceName];
-      // await new Promise(r => setTimeout(r, 1000));
       if (!logGroups) {
         console.log('called getloggroups')
         const theLogs = (await bffApi.getLogGroups(service.serviceName, token!))?.logGroups!;
         logGroupStore.addLogGroups(theLogs, service.serviceName);
       }
-      // const logs = logGroupStore.logGroups[service.serviceName] || [];
-      // setLogGroups(logs?.logGroups);
     }
     console.log(logGroupStore.logGroups)
     getData();
@@ -64,7 +61,7 @@ export default function ServiceInfo({ service }: {service: IService}) {
           service.logErrorStatus?
             <span style={{color:'red', fontWeight:'bold'}}>{service.logErrorStatus}</span>
             :<span style={{color:'green', fontWeight:'bold'}}>OK</span>
-        } {
+        }&nbsp;{
           service.lastLogEventsWithErrorsTS && 
           date.format(new Date(service.lastLogEventsWithErrorsTS), 'YYYY/MM/DD HH:mm:ss')
         }</p>
